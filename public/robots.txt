@@ -1,0 +1,4 @@
+user-agent: *
+Allow: /
+
+Sitemap: https://affaanm.com/sitemap.xml
