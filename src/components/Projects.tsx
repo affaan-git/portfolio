@@ -6,6 +6,25 @@ import ProjectCard from "./ProjectCard";
 export default function Projects() {
   const projectList = [
     {
+      title: "SuperKart",
+      imageSrcLight: "/images/superkart-light.png",
+      imageSrcDark: "/images/superkart-dark.png",
+      description:
+        "Deployed a retail sales revenue forecasting pipeline with a full-stack front-end and back-end REST API, allowing operationalized insights and predictive sales management.\n* Frontend: https://huggingface.co/spaces/UTAIML/SalesTotalPredictionFrontend\n* Backend: https://huggingface.co/spaces/UTAIML/SalesTotalPredictionBackend",
+      tags: [
+        "Predictive Analytics",
+        "APIs",
+        "Machine Learning",
+        "Scikit-Learn",
+        "Tensorflow",
+        "Data Science",
+        "Data Preperation",
+        "Pandas",
+        "NumPy",
+        "Python"
+      ]
+    },
+    {
       title: "Bank Customer Churn Prediction (Apr 2025)",
       imageSrc: "/images/bank-customer-churn-prediction-visualizer.png",
       description:
