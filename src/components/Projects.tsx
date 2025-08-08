@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import ProjectCard from "./ProjectCard";
 
@@ -96,6 +97,60 @@ export default function Projects() {
     },
   ];
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const getMetrics = () => {
+      const styles = window.getComputedStyle(grid);
+      const rowHeight = parseFloat(styles.getPropertyValue("grid-auto-rows")) || 8;
+      const rowGap =
+        parseFloat(styles.getPropertyValue("row-gap")) ||
+        parseFloat(styles.getPropertyValue("grid-row-gap")) ||
+        0;
+      return { rowHeight, rowGap };
+    };
+
+    const items = Array.from(
+      grid.querySelectorAll<HTMLElement>("[data-masonry-item]")
+    );
+
+    const update = () => {
+      const { rowHeight, rowGap } = getMetrics();
+      items.forEach((item) => {
+        const content =
+          (item.querySelector("[data-masonry-content]") as HTMLElement) || item;
+        // reset first so we read the natural content height
+        item.style.gridRowEnd = "span 1";
+        const h = content.getBoundingClientRect().height;
+        const span = Math.ceil((h + rowGap) / (rowHeight + rowGap));
+        item.style.gridRowEnd = `span ${span}`;
+      });
+    };
+
+    const ro = new ResizeObserver(update);
+    ro.observe(grid);
+    items.forEach((el) => {
+      ro.observe(el);
+      // Recalculate when images load (Next/Image still fires on the <img>)
+      el.querySelectorAll("img").forEach((img) => {
+        if (img.complete) return;
+        img.addEventListener("load", update, { once: true });
+        img.addEventListener("error", update, { once: true });
+      });
+    });
+
+    update();
+    window.addEventListener("resize", update);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
   return (
     <motion.section
       id="projects"
@@ -112,17 +167,23 @@ export default function Projects() {
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div
+        ref={gridRef}
+        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 [grid-auto-rows:8px]"
+      >
         {projectList.map((project, index) => (
-          <motion.span
+          <motion.div
             key={project.title}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 + index * 0.1 }}
             viewport={{ once: true }}
+            data-masonry-item
           >
-            <ProjectCard {...project} />
-          </motion.span>
+            <div data-masonry-content>
+              <ProjectCard {...project} />
+            </div>
+          </motion.div>
         ))}
       </div>
     </motion.section>
