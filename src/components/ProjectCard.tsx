@@ -13,6 +13,40 @@ interface ProjectCardProps {
   tags: string[];
 }
 
+const URL_CAPTURE_REGEX = /(https?:\/\/[^\s]+)/gi;
+
+function renderDescription(text: string) {
+  const normalized = text.replace(/\r\n?/g, "\n").replace(/\\n/g, "\n");
+  const parts = normalized.split(URL_CAPTURE_REGEX);
+
+  const out: JSX.Element[] = [];
+  parts.forEach((part, i) => {
+    const isUrl = part.startsWith("http://") || part.startsWith("https://");
+
+    if (isUrl) {
+      out.push(
+        <a
+          key={`lnk-${i}`}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline break-words [overflow-wrap:anywhere]"
+        >
+          {part}
+        </a>
+      );
+    } else {
+      const lines = part.split("\n");
+      lines.forEach((line, j) => {
+        out.push(<span key={`txt-${i}-${j}`}>{line}</span>);
+        if (j < lines.length - 1) out.push(<br key={`br-${i}-${j}`} />);
+      });
+    }
+  });
+
+  return out;
+}
+
 export default function ProjectCard({
   title,
   imageSrc,
@@ -63,7 +97,7 @@ export default function ProjectCard({
 
       {/* Description */}
       <p className="text-black dark:text-white text-base leading-relaxed mb-4 flex-1">
-        {description}
+        {renderDescription(description)}
       </p>
 
       {/* Tags */}
