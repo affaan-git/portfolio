@@ -31,8 +31,7 @@ export default function ScrollIndicatorButton({
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement> | React.PointerEvent<HTMLButtonElement>) => {
       setHovered(false);
-      const fn = smoothScrollToSection(targetId);
-      fn(e as any);
+      smoothScrollToSection(targetId)(e);
     },
     [targetId]
   );

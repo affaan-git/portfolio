@@ -24,7 +24,7 @@ export const scrollToSection = (elementId: string) => {
 
 export const smoothScrollToSection =
   (elementId: string) =>
-  (e?: React.MouseEvent<HTMLElement>) => {
+  (e?: React.SyntheticEvent<HTMLElement>) => {
     e?.preventDefault?.();
     scrollToSection(elementId);
   };
