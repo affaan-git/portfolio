@@ -7,7 +7,7 @@ import ProjectCard from "./ProjectCard";
 export default function Projects() {
   const projectList = [
     {
-      title: "SuperKart",
+      title: "SuperKart - Retail Sales Revenue Forecaster",
       imageSrcLight: "/images/superkart-light.png",
       imageSrcDark: "/images/superkart-dark.png",
       description:
@@ -23,10 +23,11 @@ export default function Projects() {
         "Pandas",
         "NumPy",
         "Python"
-      ]
+      ],
+      dateRange: "July 2025"
     },
     {
-      title: "Bank Customer Churn Prediction (Apr 2025)",
+      title: "Bank Customer Churn Prediction",
       imageSrc: "/images/bank-customer-churn-prediction-visualizer.png",
       description:
         "Customer churn predictor using neural networks trained on balanced and imbalanced datasets, delivering insights to improve retention.",
@@ -39,16 +40,18 @@ export default function Projects() {
         "Budgeting",
         "Python",
       ],
+      dateRange: "Apr 2025",
     },
     {
-      title: "Restaurant Turnover Prediction Hackathon (Feb 2025)",
+      title: "Restaurant Turnover Prediction Hackathon",
       imageSrc: "/images/restaurant-turnover-prediction-evaluation.png",
       description:
         "Turnover prediction system for 20K+ restaurants using social media, surveys, and ratings; built with clustering, boosting, and ensemble models.",
       tags: ["Machine Learning", "Tensorflow", "SciKit-Learn", "Python"],
+      dateRange: "Feb 2025",
     },
     {
-      title: "Vacation Manager Android Application (Dec 2023 - Feb 2024)",
+      title: "Vacation Manager Android Application",
       imageSrc: "/images/vacations-manager-android-application.png",
       description:
         "Android app with multi-screen UI, real-time scheduling, notifications, and adaptive backend - published on Google Play.",
@@ -61,6 +64,7 @@ export default function Projects() {
         "Risk & Stakeholder Management",
         "Procurement & Budgeting",
       ],
+      dateRange: "Dec 2023 - Feb 2024",
     },
     {
       title: "Stock Calculation Server",

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useMemo, useState } from "react";
+import { Calendar } from "react-feather";
 
 interface ProjectCardProps {
   title: string;
@@ -11,6 +12,7 @@ interface ProjectCardProps {
   imageSrcDark?: string | null;
   description: string;
   tags: string[];
+  dateRange?: string;
 }
 
 const URL_CAPTURE_REGEX = /(https?:\/\/[^\s]+)/gi;
@@ -54,6 +56,7 @@ export default function ProjectCard({
   imageSrcDark,
   description,
   tags,
+  dateRange,
 }: ProjectCardProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -72,7 +75,21 @@ export default function ProjectCard({
   return (
     <div className="bg-gray-100 dark:bg-dark-muted rounded-xl p-6 shadow-md flex flex-col outline outline-2 outline-transparent hover:outline-green-300 dark:hover:outline-green-500 hover:scale-105 transition-all duration-150">
       {/* Title */}
-      <h3 className="text-xl text-center text-black dark:text-white mb-4">{title}</h3>
+      <h3 className="text-xl text-center text-black dark:text-white mb-1">{title}</h3>
+
+      {dateRange && (
+        <div className="mb-4 text-center">
+          <span className="inline-flex items-center gap-1 rounded-full border border-black/10 dark:border-white/10 px-2 py-0.5 text-sm text-gray-700 dark:text-gray-300 bg-white/60 dark:bg-white/10 hover:opacity-50 dark:hover:opacity-75 transition-opacity duration-150">
+            <span aria-hidden>
+              <Calendar
+                stroke={resolvedTheme === "light" ? "black" : "white"}
+                size={16}
+              />
+            </span>
+            <span>{dateRange}</span>
+          </span>
+        </div>
+      )}
 
       {/* Image or Fallback */}
       <div className="relative aspect-[16/9] rounded-md overflow-hidden mb-4">
