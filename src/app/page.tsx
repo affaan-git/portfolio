@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import Hero from '@/components/Hero';
+import ScrollIndicatorButton from '@/components/ScrollIndicatorButton';
 import About from '@/components/About';
 import Skills from '@/components/Skills';
 import Certifications from '@/components/Certifications';
@@ -23,6 +24,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ScrollIndicatorButton />
       <About />
       <Skills />
       <Certifications />

@@ -3,23 +3,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { smoothScrollToSection } from "@/utils";
-import { ChevronDown, ArrowDownCircle } from "react-feather";
 
 export default function Hero() {
-  const [hovered, setHovered] = useState(false);
-  const [hideIndicator, setHideIndicator] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setHideIndicator(scrollY > 150); // Threshold to hide indicator
-    };
-
-    handleScroll(); // Check once on mount
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <motion.section
       id="hero"
@@ -38,32 +23,6 @@ export default function Hero() {
         As a full-stack software engineer, I help build business applications and
         infrastructure from any point in the process - Start to Finish.
       </p>
-
-      <motion.div
-        animate={hovered ? { y: 0 } : { y: [0, 12, 0], transition: { repeat: Infinity, duration: 3, ease: "easeInOut" }}}
-        className={`absolute [bottom:min(8vh,6rem)] left-1/2 -translate-x-1/2 z-10 cursor-pointer transition-opacity duration-500
-          ${hideIndicator ? "opacity-0 pointer-events-none" : "opacity-80 hover:opacity-100"}
-          w-fit px-2 text-center flex items-center justify-center
-        `}
-        onClick={smoothScrollToSection("about")}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onTouchStart={() => setHovered(true)}
-        onTouchEnd={() => setHovered(false)}
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={hovered ? "arrow-down-circle" : "chevron-down"}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-          >
-            {hovered ? <ArrowDownCircle size={30} /> : <ChevronDown size={28} />}
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-
     </motion.section>
   );
 }
