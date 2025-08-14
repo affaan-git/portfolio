@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from 'next-themes';
 import Header from "@/components/Header";
+import ThemeColorUpdater from "./ThemeColorUpdater"
 
 const siteUrl = "https://affaanm.com";
 const siteName = "Affaan Memon | Software Engineer";
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
   // Icons and PWA manifest
   icons: {
     icon: [
-      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],
@@ -110,7 +111,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#171717" },
+    { media: "(prefers-color-scheme: dark)", color: "#121212" },
   ],
 };
 
@@ -118,13 +119,9 @@ export const viewport: Viewport = {
 export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="color-scheme" content="light dark" />
-        <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background-light text-black dark:bg-background-dark dark:text-white`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeColorUpdater light="ffffff" dark="121212" />
           <Header />
           <main>{children}</main>
         </ThemeProvider>
