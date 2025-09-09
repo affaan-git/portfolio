@@ -9,7 +9,7 @@ export default function Education() {
       iconSrc: null,
       institution: "University of Texas at Austin",
       program: "Postgraduate Certification, Artificial Intelligence and Machine Learning",
-      dateRange: "October 2024 - July 2025",
+      dateRange: "October 2024 - August 2025",
     },
     {
       iconSrc: null,
