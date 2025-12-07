@@ -1,7 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-html {
-  @apply bg-background-light dark:bg-background-dark;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background-light: #ffffff;
+  --color-background-dark: #121212;
+  --color-dark-muted: #243447;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    @apply bg-background-light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    @apply bg-background-dark;
+  }
+
+  body {
+    @apply text-black dark:text-white;
+  }
 }

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import { Calendar } from "react-feather";
 
 interface ProjectCardProps {
@@ -82,8 +82,9 @@ export default function ProjectCard({
           <span className="inline-flex items-center gap-1 rounded-full border border-black/10 dark:border-white/10 px-2 py-0.5 text-sm text-gray-700 dark:text-gray-300 bg-white/60 dark:bg-white/10 hover:opacity-50 dark:hover:opacity-75 transition-opacity duration-150">
             <span aria-hidden>
               <Calendar
-                stroke={resolvedTheme === "light" ? "black" : "white"}
+                stroke="currentColor"
                 size={16}
+                className="transition-colors duration-150"
               />
             </span>
             <span>{dateRange}</span>

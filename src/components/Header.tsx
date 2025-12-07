@@ -95,10 +95,10 @@ export default function Header() {
 
           <button
             onClick={toggleTheme}
-            className="ml-1 sm:ml-2 p-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-300 relative h-8 w-8"
+            className="ml-1 sm:ml-2 p-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-300 relative h-8 w-8"
             aria-label="Toggle Dark Mode"
           >
-            <Moon
+            <Sun
               stroke="black"
               size={24}
               strokeWidth={1.5}
@@ -108,7 +108,7 @@ export default function Header() {
                   : "opacity-0 scale-75 rotate-45 pointer-events-none"
               }`}
             />
-            <Sun
+            <Moon
               stroke="gold"
               size={24}
               strokeWidth={1.5}

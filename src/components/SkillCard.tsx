@@ -62,9 +62,7 @@ export default function SkillCard({
         </div>
       )}
 
-      <span
-        className={`text-black dark:text-white ${hasIcon ? "" : "text-center w-full"}`}
-      >
+      <span className={`text-black dark:text-white ${hasIcon ? "" : "text-center w-full"}`}>
         {label}
       </span>
     </div>
