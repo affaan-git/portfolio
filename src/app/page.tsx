@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { scrollToSection } from '@/utils';
+
 import Hero from '@/components/Hero';
 import ScrollIndicatorButton from '@/components/ScrollIndicatorButton';
 import About from '@/components/About';
@@ -15,10 +17,10 @@ import ScrollToTopButton from '@/components/ScrollToTopButton';
 export default function HomePage() {
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
 
-    if (hash) {
-      history.replaceState(null, '', '/');  // clean /#
-    }
+    if (document.getElementById(hash)) scrollToSection(hash);
+    history.replaceState(null, '', '/');
   }, []);
 
   return (

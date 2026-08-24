@@ -1,6 +1,7 @@
 {
-  "name": "Portfolio",
-  "short_name": "Portfolio",
+  "name": "Affaan Memon | Software Engineer",
+  "short_name": "Affaan Memon",
+  "description": "Portfolio of Affaan Memon - Software Engineer in Austin, TX.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -22,5 +23,7 @@
     }
   ],
   "display": "standalone",
-  "start_url": "/"
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
 }

@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { ChevronDown, ArrowDownCircle } from "react-feather";
 import { smoothScrollToSection } from "@/utils";
 
 interface Props {
   targetId?: string;  // section id to scroll to
-  hideAfter?: number; // px scrolled before hiding (default 150)
+  hideAfter?: number; // px scrolled before hiding (default 115)
 }
 
 export default function ScrollIndicatorButton({
   targetId = "about",
-  hideAfter = 150,
+  hideAfter = 115,
 }: Props) {
   const [hovered, setHovered] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -48,9 +48,9 @@ export default function ScrollIndicatorButton({
     }
     if (hovered) {
       controls.stop();
-      tweenToRest();
+      void tweenToRest();
     } else {
-      startBounce();
+      void startBounce();
     }
   }, [hidden, hovered]);
 
@@ -63,7 +63,7 @@ export default function ScrollIndicatorButton({
   return (
     <div
       className="fixed inset-x-0 z-50 flex justify-center transition-opacity duration-500"
-      style={{ bottom: "calc(min(8vh, 6rem) + env(safe-area-inset-bottom))" }}
+      style={{ bottom: "calc(min(8dvh, 6rem) + env(safe-area-inset-bottom))" }}
     >
       <motion.button
         type="button"
@@ -75,7 +75,7 @@ export default function ScrollIndicatorButton({
           interactingRef.current = true;
           setHovered(true);
           controls.stop();
-          tweenToRest();
+          void tweenToRest();
         }}
         onPointerUp={() => {
           interactingRef.current = false;
@@ -87,22 +87,23 @@ export default function ScrollIndicatorButton({
         }}
         style={{ touchAction: "manipulation" }}
         animate={controls}
-        className={`px-2 cursor-pointer ${
+        className={`relative h-9 w-9 cursor-pointer ${
           hidden ? "opacity-0 pointer-events-none" : "opacity-80 hover:opacity-100"
         }`}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={hovered ? "arrow" : "chevron"}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="inline-flex items-center justify-center"
-          >
-            {hovered ? <ArrowDownCircle size={30} /> : <ChevronDown size={28} />}
-          </motion.span>
-        </AnimatePresence>
+        {/* Both icons stay mounted and cross-fade */}
+        <ChevronDown
+          size={28}
+          className={`absolute inset-0 m-auto transition-all duration-200 ${
+            hovered ? "opacity-0 scale-95" : "opacity-100 scale-100"
+          }`}
+        />
+        <ArrowDownCircle
+          size={30}
+          className={`absolute inset-0 m-auto transition-all duration-200 ${
+            hovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+        />
       </motion.button>
     </div>
   );

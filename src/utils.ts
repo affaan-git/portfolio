@@ -1,4 +1,4 @@
-export const isBrowser = () => typeof window !== 'undefined';
+const isBrowser = () => typeof window !== 'undefined';
 
 export const scrollToSection = (elementId: string) => {
   if (!isBrowser()) return;

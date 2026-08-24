@@ -9,21 +9,24 @@ type Props = {
 };
 
 export default function ThemeColorUpdater({
-  light = "#ffffff",
-  dark = "#171717",
+  light = "#f3f4f6",
+  dark = "#121212",
 }: Props) {
   const { resolvedTheme } = useTheme(); // "light", "dark", undefined
 
   useEffect(() => {
-    let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (!meta) {
-      meta = document.createElement("meta");
+    const color = resolvedTheme === "dark" ? dark : light;
+    const metas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
+
+    if (metas.length === 0) {
+      const meta = document.createElement("meta");
       meta.setAttribute("name", "theme-color");
+      meta.setAttribute("content", color);
       document.head.appendChild(meta);
+      return;
     }
 
-    const color = resolvedTheme === "dark" ? dark : light;
-    meta.setAttribute("content", color);
+    metas.forEach((meta) => meta.setAttribute("content", color));
   }, [resolvedTheme, light, dark]);
 
   return null;

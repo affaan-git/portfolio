@@ -15,7 +15,7 @@ export default function EducationItem({
 }: EducationItemProps) {
   return (
     <div
-      className={`bg-gray-100 dark:bg-dark-muted rounded-xl p-6 shadow-md flex items-center ${
+      className={`bg-light-muted dark:bg-dark-muted rounded-xl p-6 shadow-md flex items-center ${
         iconSrc ? "space-x-4" : ""
       } outline outline-2 outline-transparent hover:outline-green-300 dark:hover:outline-green-500 transition-all duration-150`}
     >
@@ -31,7 +31,7 @@ export default function EducationItem({
         </div>
       )}
 
-      <div className="text-black dark:text-white">
+      <div className="text-ink dark:text-white">
         <p className="text-lg font-medium">{institution}</p>
         <p className="text-base opacity-80 mt-1">
           {program}

@@ -1,9 +1,9 @@
 # Portfolio Website
 
-Visit at: [affaanm.com](https://www.affaanm.com)  
+Visit at: [affaanm.com](https://affaanm.com)  
 
 A modern, responsive, and fast portfolio website built with [Next.js](https://nextjs.org), [TypeScript](https://www.typescriptlang.org), and [Tailwind CSS](https://tailwindcss.com).  
-Designed to showcase skills, projects, certifications, and experiences.
+Designed to showcase skills, projects, certifications, and education.
 
 ## Design
 
@@ -11,7 +11,7 @@ Designed to showcase skills, projects, certifications, and experiences.
 * Skills showcase with card layout.
 * Projects section with current and recent projects.
 * Simplified education section with key details.
-* Certifications and experiences section to highlight achievements.
+* Certifications section to highlight achievements.
 
 ## Features
 
