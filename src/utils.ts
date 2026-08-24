@@ -6,7 +6,8 @@ export const scrollToSection = (elementId: string) => {
   const el = document.getElementById(elementId);
   if (!el) return;
 
-  const headerOffset = 64; // 4rem
+  const header = document.querySelector('header');
+  const headerOffset = header?.getBoundingClientRect().height ?? 64; // 4rem
   const initialY = window.scrollY;
 
   const elementTop = el.getBoundingClientRect().top + window.scrollY;

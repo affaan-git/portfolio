@@ -63,7 +63,7 @@ export default function ScrollIndicatorButton({
   return (
     <div
       className="fixed inset-x-0 z-50 flex justify-center transition-opacity duration-500"
-      style={{ bottom: "calc(min(8dvh, 6rem) + env(safe-area-inset-bottom))" }}
+      style={{ bottom: "calc(min(8svh, 6rem) + env(safe-area-inset-bottom))" }}
     >
       <motion.button
         type="button"

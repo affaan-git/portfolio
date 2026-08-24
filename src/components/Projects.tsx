@@ -220,6 +220,57 @@ const projectList: Project[] = [
   },
 ];
 
+type Column = 0 | 1;
+
+// Level grid
+const packTwoColumns = (spans: number[]): Column[] => {
+  interface Step {
+    cost: number;
+    prev: number;
+    column: Column;
+  }
+
+  // Running difference between both column heights
+  let states = new Map<number, Step>([[0, { cost: 0, prev: 0, column: 0 }]]);
+  const history: Map<number, Step>[] = [];
+
+  for (const span of spans) {
+    const next = new Map<number, Step>();
+    for (const [diff, step] of states) {
+      for (const column of [0, 1] as const) {
+        const moved = column === 0 ? diff + span : diff - span;
+        const cost = step.cost + Math.abs(moved);
+        const seen = next.get(moved);
+        if (!seen || cost < seen.cost) next.set(moved, { cost, prev: diff, column });
+      }
+    }
+    history.push(next);
+    states = next;
+  }
+
+  let bestDiff = 0;
+  let bestScore = Infinity;
+  for (const [diff, step] of states) {
+    // Level ends first, level throughout only as a tie-break
+    const score = Math.abs(diff) * 1e6 + step.cost;
+    if (score < bestScore) {
+      bestScore = score;
+      bestDiff = diff;
+    }
+  }
+
+  const columns: Column[] = [];
+  let diff = bestDiff;
+  for (let i = history.length - 1; i >= 0; i--) {
+    const step = history[i].get(diff)!;
+    columns[i] = step.column;
+    diff = step.prev;
+  }
+
+  // Both columns are interchangeable, keep the newest card top left
+  return columns[0] === 1 ? columns.map((c) => (c === 0 ? 1 : 0)) : columns;
+};
+
 export default function Projects() {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -227,37 +278,46 @@ export default function Projects() {
     const grid = gridRef.current;
     if (!grid) return;
 
-    const getMetrics = () => {
-      const styles = window.getComputedStyle(grid);
-      const rowHeight = parseFloat(styles.getPropertyValue("grid-auto-rows")) || 8;
-      const rowGap =
-        parseFloat(styles.getPropertyValue("row-gap")) ||
-        parseFloat(styles.getPropertyValue("grid-row-gap")) ||
-        0;
-      return { rowHeight, rowGap };
-    };
-
     const items = Array.from(
       grid.querySelectorAll<HTMLElement>("[data-masonry-item]")
     );
+    const contentOf = (item: HTMLElement) =>
+      item.querySelector<HTMLElement>("[data-masonry-content]") ?? item;
 
     let frame = 0;
 
     const update = () => {
       frame = 0;
-      const { rowHeight, rowGap } = getMetrics();
-      // Reset every item first, then read every height, then write every span, preventing reflow per item
-      items.forEach((item) => {
-        item.style.gridRowEnd = "span 1";
-      });
-      const spans = items.map((item) => {
-        const content =
-          item.querySelector<HTMLElement>("[data-masonry-content]") ?? item;
-        const h = content.getBoundingClientRect().height;
-        return Math.ceil((h + rowGap) / (rowHeight + rowGap));
-      });
+      const styles = window.getComputedStyle(grid);
+
+      // Anything except both columns places itself
+      if (styles.gridTemplateColumns.split(" ").length !== 2) {
+        items.forEach((item) => {
+          item.style.gridColumn = "";
+          item.style.gridRow = "";
+        });
+        return;
+      }
+
+      const rowHeight = parseFloat(styles.gridAutoRows) || 8;
+      const rowGap = parseFloat(styles.rowGap) || 0;
+      const gutter = parseFloat(styles.columnGap) || 0;
+
+      // Read every height, then write every placement, preventing reflow per card
+      const spans = items.map((item) =>
+        Math.ceil(
+          (contentOf(item).getBoundingClientRect().height + gutter + rowGap) /
+            (rowHeight + rowGap)
+        )
+      );
+      const columns = packTwoColumns(spans);
+      // Row placing
+      const cursor = [1, 1];
       items.forEach((item, i) => {
-        item.style.gridRowEnd = `span ${spans[i]}`;
+        const column = columns[i];
+        item.style.gridColumn = `${column + 1}`;
+        item.style.gridRow = `${cursor[column]} / span ${spans[i]}`;
+        cursor[column] += spans[i];
       });
     };
 
@@ -266,11 +326,11 @@ export default function Projects() {
       frame = requestAnimationFrame(update);
     };
 
+    // Width changes
     const ro = new ResizeObserver(schedule);
     ro.observe(grid);
     items.forEach((el) => {
-      // Observe the content box, not the grid item
-      ro.observe(el.querySelector<HTMLElement>("[data-masonry-content]") ?? el);
+      ro.observe(contentOf(el));
       // Recalculate when images load (Next/Image still fires on the <img>)
       el.querySelectorAll("img").forEach((img) => {
         if (img.complete) return;
@@ -280,12 +340,10 @@ export default function Projects() {
     });
 
     update();
-    window.addEventListener("resize", schedule);
 
     return () => {
       if (frame) cancelAnimationFrame(frame);
       ro.disconnect();
-      window.removeEventListener("resize", schedule);
     };
   }, []);
 
@@ -297,7 +355,7 @@ export default function Projects() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true }}
     >
       <div className="max-w-3xl mx-auto text-left mb-8">
         <h2 className="text-3xl font-semibold mb-2">Top Projects</h2>
@@ -308,7 +366,7 @@ export default function Projects() {
 
       <div
         ref={gridRef}
-        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 [grid-auto-rows:8px]"
+        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 md:gap-y-0 md:[grid-auto-rows:8px]"
       >
         {projectList.map((project, index) => (
           <motion.div

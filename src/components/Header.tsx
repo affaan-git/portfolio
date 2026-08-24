@@ -7,6 +7,9 @@ import { usePathname } from "next/navigation";
 import { GitHub, Linkedin, Sun, Moon } from "react-feather";
 import { smoothScrollToSection } from "@/utils";
 
+const NEAR_TOP_PX = 100; // Always visible threshold
+const REVEAL_AFTER_UP_PX = 10; // Upward travel return amount
+
 export default function Header() {
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
@@ -15,14 +18,29 @@ export default function Header() {
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let upTravel = 0;
+
     const onScroll = () => {
       const currentY = window.scrollY;
-      setShowHeader(currentY < 100 || currentY < lastScrollY);
+      const delta = currentY - lastScrollY;
       lastScrollY = currentY;
+
+      if (currentY < NEAR_TOP_PX) {
+        upTravel = 0;
+        setShowHeader(true);
+        return;
+      }
+      if (delta > 0) {
+        upTravel = 0;
+        setShowHeader(false);
+        return;
+      }
+      upTravel -= delta;
+      if (upTravel >= REVEAL_AFTER_UP_PX) setShowHeader(true);
     };
 
     // Scroll on reload
-    onScroll();
+    setShowHeader(window.scrollY < NEAR_TOP_PX);
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
