@@ -290,8 +290,8 @@ export default function Projects() {
       frame = 0;
       const styles = window.getComputedStyle(grid);
 
-      // Anything except both columns places itself
-      if (styles.gridTemplateColumns.split(" ").length !== 2) {
+      const rowHeight = parseFloat(styles.gridAutoRows);
+      if (Number.isNaN(rowHeight)) {
         items.forEach((item) => {
           item.style.gridColumn = "";
           item.style.gridRow = "";
@@ -299,7 +299,6 @@ export default function Projects() {
         return;
       }
 
-      const rowHeight = parseFloat(styles.gridAutoRows) || 8;
       const rowGap = parseFloat(styles.rowGap) || 0;
       const gutter = parseFloat(styles.columnGap) || 0;
 
